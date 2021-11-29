@@ -5,6 +5,21 @@ const products = getProducts();
 const employees = getEmployees();
 const orders = getOrders();
 
+document.addEventListener("click", (event) => {
+    const clicked = event.target;
+    if (clicked.id.startsWith("product")) {
+        const [, prodId] = clicked.id.split("--");
+
+        for (const product of products) {
+            if (product.id === parseInt(prodId)) {
+                window.alert(
+                    `${product.name} costs $${product.price.toFixed(2)}`
+                );
+            }
+        }
+    }
+});
+
 // Function whose responsibility is to find the product for an order
 const findProduct = (order, allProducts) => {
     let orderProduct = null;
@@ -24,7 +39,7 @@ const findEmployee = (order, allEmployees) => {
 
     for (const employee of allEmployees) {
         if (employee.id === order.employeeId) {
-            orderEmployee = employee.name;
+            orderEmployee = employee;
         }
     }
 
@@ -39,7 +54,7 @@ export const Orders = () => {
         const employee = findEmployee(order, employees);
         const product = findProduct(order, products);
 
-        html += `<li>${product.name} was sold by ${employee} on ${new Date(
+        html += `<li>${product.name} was sold by ${employee.name} on ${new Date(
             order.timestamp
         ).toLocaleDateString()}</li>`;
     }
